@@ -8,21 +8,32 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class WeatherMain {
 	
-public void readFromInputAndWriteToOutput(String inputFile, String outputFile) {
+public void readCityAndWriteWeatherToFile(String inputFile) {
 		
 		try {
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(inputFile + ".txt"));
-			String lineInFile = bufferedReader.readLine();
-			System.out.println(inputFile + ".txt " + lineInFile);
 			
-			WeatherRepo weatherNow2 = new WeatherRepo(lineInFile);
-			ForecastRepo forecastNow2 = new ForecastRepo(lineInFile);
+			ArrayList<String> cities = new ArrayList<String>();
+			String lineInFile;
+			while ((lineInFile = bufferedReader.readLine()) != null) {
+				cities.add(lineInFile);
+			}
 			
-			Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile + ".txt"), "utf-8"));
+			//linnale oma fail ja ilmaennustus
+			for (String city : cities) {
+			
+			WeatherRepo weatherNow2 = new WeatherRepo(city);
+			ForecastRepo forecastNow2 = new ForecastRepo(city);
+			
+			
+			Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(city + ".txt"), "utf-8"));
+			writer.write(city + "\n");
+			writer.write("Cordinates: " + weatherNow2.getCoordinates() + "\n");
 			writer.write("Weather at the moment: " + weatherNow2.getCurrentCity() + ": " + weatherNow2.getTemperatureAtTheMoment() + "\n");
 			writer.write("Forecast: " + "1st day minTemp - " + forecastNow2.getMaxAndMinTemp(1, "min") + "and maxTemp - " + forecastNow2.getMaxAndMinTemp(1, "max")
 			+ "\n" + "2nd day minTemp - " + forecastNow2.getMaxAndMinTemp(2, "min") + "and maxTemp - " + forecastNow2.getMaxAndMinTemp(2, "max")
@@ -30,10 +41,14 @@ public void readFromInputAndWriteToOutput(String inputFile, String outputFile) {
 			
 			writer.close();
 			
-		} catch (IOException e1) {
-			e1.printStackTrace();
 		}
-		
+	}
+		catch (FileNotFoundException e1) {
+			 System.out.println("File not found");
+		}
+		catch (IOException e1) {
+			e1.printStackTrace();
+		} 
 				
 }
 	
@@ -63,11 +78,7 @@ public void readFromInputAndWriteToOutput(String inputFile, String outputFile) {
 				Scanner scan3 = new Scanner(System.in);
 				String inputFile = scan3.nextLine();
 				
-				System.out.println("Output file: ");
-				Scanner scan4 = new Scanner(System.in);
-				String outputFile = scan3.nextLine();
-				
-				weather.readFromInputAndWriteToOutput(inputFile, outputFile);
+				weather.readCityAndWriteWeatherToFile(inputFile);
 				
 
 			}

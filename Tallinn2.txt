@@ -1,0 +1,4 @@
+Weather at the moment: Tallinn: -1.0
+Forecast: 1st day minTemp - nulland maxTemp - null
+2nd day minTemp - nulland maxTemp - null
+3rd day minTemp - nulland maxTemp - null

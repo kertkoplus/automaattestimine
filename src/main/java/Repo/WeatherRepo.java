@@ -75,6 +75,35 @@ public class WeatherRepo {
         }
         return "";
     }
+    
+    public String getCoordinates() {
+    	
+    	 try {
+    	
+    	 JSONObject coord = jsonObject.getJSONObject("coord");
+    	 return "lon: " + coord.getDouble("lon") + ", lat: " + coord.getDouble("lat");
+    	 
+    	 } catch (JSONException e1) {
+    	 e1.printStackTrace();
+    }
+    	 return null;
+    }
+    
+    public void setCity(String city) {
+    	 this.city = city;
+    }
+ 
+    public void setJsonObject(JSONObject jsonObject) {
+    	this.jsonObject = jsonObject;
+    }
+    
+    
+    
+    
+    
+  
+    
+    
 
 
 }

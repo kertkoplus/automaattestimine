@@ -9,6 +9,8 @@ import Repo.WeatherRepo;
 
 import static org.junit.Assert.*;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Before;
 
 public class WeatherTest {
@@ -73,6 +75,25 @@ public class WeatherTest {
     	Double responseMinTempNextDay = forecastAtTheMoment.getMaxAndMinTemp(1, "min");
     	
     	 assertEquals(expectedMinTempNextDay, responseMinTempNextDay);
+    }
+    
+    @Test
+    public void testWeatherWithoutOpenWeatherApi() {
+    	WeatherRepo weatherRepo = new WeatherRepo();
+    	
+    	weatherRepo.setCity("Tallinn");
+    	
+    	try {
+    		weatherRepo.setJsonObject(new JSONObject("{\"coord\":{\"lon\":24.75,\"lat\":59.44},\"weather\":[{\"id\":804,\"main\":\"Clouds\",\"description\":\"overcast clouds\",\"icon\":\"04n\"}],\"base\":\"stations\",\"main\":{\"temp\":-1,\"pressure\":1026,\"humidity\":92,\"temp_min\":-1,\"temp_max\":-1},\"visibility\":10000,\"wind\":{\"speed\":3.6,\"deg\":240},\"clouds\":{\"all\":90},\"dt\":1515567000,\"sys\":{\"type\":1,\"id\":5014,\"message\":0.0022,\"country\":\"EE\",\"sunrise\":1515568244,\"sunset\":1515592014},\"id\":588409,\"name\":\"Tallinn\",\"cod\":200}"));
+    	} catch (JSONException e1) {
+    		e1.printStackTrace();
+    	}
+    	
+    	assertEquals("Tallinn", weatherRepo.getCurrentCity());
+    	assertEquals((Double) (-1.0), weatherRepo.getTemperatureAtTheMoment());
+    	assertEquals("lon: 24.75, lat: 59.44", weatherRepo.getCoordinates());
+    	
+    	
     }
     
     
