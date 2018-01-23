@@ -80,58 +80,51 @@ public class ForecastRepo {
     }
     
     public Double getMaxAndMinTemp(int day, String maxMin) {
-    	if (day < 1 || day > 3) {
-    		return null;
-    	}
-    	
-    	if (!maxMin.toLowerCase().equals("max") && !maxMin.toLowerCase().equals("min")) {
-    		return null;
-    	}
-    	
-    	LocalDateTime localDate = LocalDateTime.from(currentDate.toInstant().atZone(ZoneId.of("UTC+03:00"))).plusDays(1);
-    	String formatDate = localDate.format(dateTime);
-    	
-    	//vaatame listi ja kui kuupaev on sama, mis meie valitud, siis lisame listi
-    	JSONArray forecastDate = new JSONArray();
-    	try {
-    		JSONArray weatherForecast = jsonObject.getJSONArray("list");
-    		
-    		for (int i=0; i < weatherForecast.length(); i++) {
-    			if (weatherForecast.getJSONObject(i).getString("dt_txt").substring(0,10).equals(formatDate)) {
-    				forecastDate.put(weatherForecast.getJSONObject(i));
-    			};
-    		}
-    		
-    	} catch (JSONException e1) {
-    		e1.printStackTrace();
-    	}
-    	
-    	//otsime max temperatuurid
-    	
-    	Double returnedTemp = null;
-    	try {
-    		
-    		for (int i=0; i < forecastDate.length(); i++) {
-    			Double temperature = forecastDate.getJSONObject(i).getJSONObject("main").getDouble("temp_max");
-    			if (returnedTemp == null) {
-    				returnedTemp = temperature;
-    			}
-    			
-    			if (temperature > returnedTemp && maxMin.toLowerCase().equals("max")) {
-    				returnedTemp = temperature;
-    			}
-    			
-    			if (temperature < returnedTemp && maxMin.toLowerCase().equals("min")) {
-    				returnedTemp = temperature;
-    			}
-    		}
-    	} catch (JSONException e1) {
-    		e1.printStackTrace();
-    	}
-    	
-    	return returnedTemp;
-    	
-
+        if (day < 1 || day > 3) {
+            return null;
+        }
+       
+        if (!maxMin.toLowerCase().equals("max") && !maxMin.toLowerCase().equals("min")) {
+            return null;
+        }
+       
+        LocalDateTime localDate = LocalDateTime.from(currentDate.toInstant().atZone(ZoneId.of("UTC+03:00"))).plusDays(1);
+        String formatDate = localDate.format(dateTime);
+       
+        JSONArray forecastDate = new JSONArray();
+        try {
+            if (jsonObject.get("dt").toString().substring(0,10).equals(formatDate)) {
+                forecastDate.put(jsonObject);
+            }
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+        }
+       
+        //otsime max temperatuurid
+       
+        Double returnedTemp = null;
+        try {
+           
+            for (int i=0; i < forecastDate.length(); i++) {
+                Double temperature = forecastDate.getJSONObject(i).getJSONObject("main").getDouble("temp_max");
+                if (returnedTemp == null) {
+                    returnedTemp = temperature;
+                }
+               
+                if (temperature > returnedTemp && maxMin.toLowerCase().equals("max")) {
+                    returnedTemp = temperature;
+                }
+               
+                if (temperature < returnedTemp && maxMin.toLowerCase().equals("min")) {
+                    returnedTemp = temperature;
+                }
+            }
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+        }
+       
+        return returnedTemp;
+       
+ 
 }
-
 }

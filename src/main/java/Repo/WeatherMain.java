@@ -1,13 +1,6 @@
 package Repo;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -27,7 +20,7 @@ public void readCityAndWriteWeatherToFile(String inputFile) {
 			//linnale oma fail ja ilmaennustus
 			for (String city : cities) {
 			
-			WeatherRepo weatherNow2 = new WeatherRepo(city);
+			WeatherRepo weatherNow2 = new WeatherRepo(new Service(city));
 			ForecastRepo forecastNow2 = new ForecastRepo(city);
 			
 			
@@ -68,7 +61,7 @@ public void readCityAndWriteWeatherToFile(String inputFile) {
 				Scanner scan2 = new Scanner(System.in);
 				String input2 = scan2.nextLine();
 				
-				WeatherRepo weatherNow = new WeatherRepo(input2);
+				WeatherRepo weatherNow = new WeatherRepo(new Service(input2));
 				System.out.println("City:" + weatherNow.getCurrentCity() + "Temp" + weatherNow.getTemperatureAtTheMoment());
 		}
 			
